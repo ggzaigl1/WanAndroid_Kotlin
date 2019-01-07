@@ -1,17 +1,32 @@
-package com.example.gab.wanandroid_kotlin.ui
+package com.example.gab.wanandroid_kotlin.ui.fragment
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.bigkoo.convenientbanner.ConvenientBanner
 import com.bigkoo.convenientbanner.listener.OnItemClickListener
 import com.example.gab.wanandroid_kotlin.R
+import com.example.gab.wanandroid_kotlin.base.BaseFragment
 
 /**
  * Created by 初夏小溪
  * data :2019/1/7 0007 9:32
  */
-class HomeFragment : AppCompatActivity(), OnItemClickListener {
+class HomeFragment : BaseFragment(), OnItemClickListener {
+
+    override fun initView(view: View?) {
+    }
+
+    override fun setContentLayout(): Int {
+        return R.layout.fragment_home
+    }
+
+    override fun initData() {
+    }
+
+    override fun isLazyLoad(): Boolean {
+        return false
+    }
 
     override fun onItemClick(position: Int) {
     }
@@ -19,12 +34,6 @@ class HomeFragment : AppCompatActivity(), OnItemClickListener {
     var mPageNo = 0
     internal var mRecyclerView: RecyclerView? = null
     internal var mConvenientBanner: ConvenientBanner<*>? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_home)
-
-    }
 
     private val pics = arrayListOf<String>()
     var images = arrayOf("http://img2.imgtn.bdimg.com/it/u=3093785514,1341050958&fm=21&gp=0.jpg",
