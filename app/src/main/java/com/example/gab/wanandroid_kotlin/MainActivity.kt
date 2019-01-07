@@ -137,9 +137,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
 
     override fun onResume() {
         super.onResume()
-//        val isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin)
-//        mTvNevHeaderTitle?.text = if (isLogin) SpfUtils.getSpfSaveStr(ConstantUtils.userName) else ResourceUtils.getStr(R.string.notLogin)
-//        mTvNevHeaderLogin?.setText(if (isLogin) R.string.login_exit else R.string.clickLogin)
+        val isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin)
+        mTvNevHeaderTitle?.text = if (isLogin) SpfUtils.getSpfSaveStr(ConstantUtils.userName) else ResourceUtils.getStr(R.string.notLogin)
+        mTvNevHeaderLogin?.setText(if (isLogin) R.string.login_exit else R.string.clickLogin)
     }
 
     override fun onTabReselected(position: Int) {

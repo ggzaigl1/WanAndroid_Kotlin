@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.gab.wanandroid_kotlin.R
+import com.example.gab.wanandroid_kotlin.adapter.MyCollectKotlinAdapter
 import com.example.gab.wanandroid_kotlin.api.ApiService
 import com.example.gab.wanandroid_kotlin.bean.CollectBean
 import com.example.gab.wanandroid_kotlin.web.WebViewActivity
@@ -75,10 +76,6 @@ class MyCollectActivity : AppCompatActivity() {
         }
         mAdapter.setEmptyView(R.layout.activity_null_data, rv_collect_title.parent as ViewGroup)
         rv_collect_title.adapter = mAdapter
-    }
-
-    private fun toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(this, message, duration).show()
     }
 
     /**

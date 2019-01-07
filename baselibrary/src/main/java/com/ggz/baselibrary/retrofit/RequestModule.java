@@ -92,6 +92,7 @@ public class RequestModule {
                         return true;
                     }
                 }).protocols(Collections.singletonList(Protocol.HTTP_1_1));
+
         InputStream is = new Buffer().writeUtf8(ConfigUtils.getCer()).inputStream();
         SSLSocketFactory sslSocketFactory = SSLUtil.getSSLSocketFactory(is);
         if (!TextUtils.isEmpty(ConfigUtils.getCer()) && null != sslSocketFactory) {

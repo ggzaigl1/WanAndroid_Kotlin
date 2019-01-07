@@ -1,4 +1,4 @@
-package com.example.gab.wanandroid_kotlin.ui
+package com.example.gab.wanandroid_kotlin.adapter
 
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
