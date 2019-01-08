@@ -17,7 +17,6 @@ import com.ggz.baselibrary.retrofit.RequestUtils
 import com.ggz.baselibrary.retrofit.RxHelper
 import com.ggz.baselibrary.utils.JumpUtils
 import com.kaopiz.kprogresshud.KProgressHUD
-import kotlinx.android.synthetic.main.activity_official_account.*
 import kotlinx.android.synthetic.main.fragment_official_account.*
 
 /**

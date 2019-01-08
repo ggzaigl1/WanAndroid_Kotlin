@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (itemId) {
-            R.id.nav_belle -> T.showShort("111")
+            R.id.nav_belle -> ToastUtils.showShort("111")
         }
         return true
     }
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 (System.currentTimeMillis() - exitTime) > time -> {
-                    T.CustomToast.INSTANCE.showToast(R.string.exit_app)
+                    ToastUtils.CustomToast.INSTANCE.showToast(R.string.exit_app)
                     exitTime = System.currentTimeMillis()
                 }
                 else -> {
