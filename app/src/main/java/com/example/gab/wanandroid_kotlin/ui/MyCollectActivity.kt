@@ -57,10 +57,10 @@ class MyCollectActivity : AppCompatActivity() {
         rv_collect_title.layoutManager = LinearLayoutManager(this)
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             WebViewActivity.startWebActivity(
-                this,
-                mAdapter.data[position].link!!,
-                mAdapter.data[position].id,
-                mAdapter.data[position].isCollect
+                    this@MyCollectActivity,
+                    mAdapter.data[position].link!!,
+                    mAdapter.data[position].id,
+                    mAdapter.data[position].isCollect
             )
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
@@ -68,9 +68,9 @@ class MyCollectActivity : AppCompatActivity() {
             when (view.id) {
                 R.id.image_collect ->
                     unCollectArticle(
-                        mAdapter.data[position].id,
-                        mAdapter.data[position].originId,
-                        position
+                            mAdapter.data[position].id,
+                            mAdapter.data[position].originId,
+                            position
                     )
             }
         }
@@ -83,33 +83,33 @@ class MyCollectActivity : AppCompatActivity() {
      */
     private fun getArticleList(mPageNo: Int) {
         mKProgressHUD = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true)
-            .setAnimationSpeed(2).setDimAmount(0.5f).show()
+                .setAnimationSpeed(2).setDimAmount(0.5f).show()
         RequestUtils.create(ApiService::class.java)
-            .getCollectList(mPageNo)
-            .compose(RxHelper.handleResult())
-            .compose(RxHelper.bindToLifecycle(this))
-            .subscribe(object : NetCallBack<CollectBean>() {
-                override fun updataLayout(flag: Int) {
-                }
+                .getCollectList(mPageNo)
+                .compose(RxHelper.handleResult())
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(object : NetCallBack<CollectBean>() {
+                    override fun updataLayout(flag: Int) {
+                    }
 
-                override fun onSuccess(collectBean: CollectBean?) {
-                    if (collectBean != null) {
-                        mKProgressHUD.dismiss()
-                        when {
-                            refreshLayout_collect.isRefreshing -> {
-                                mAdapter.setNewData(collectBean.datas)
-                                refreshLayout_collect.finishRefresh()
+                    override fun onSuccess(collectBean: CollectBean?) {
+                        if (collectBean != null) {
+                            mKProgressHUD.dismiss()
+                            when {
+                                refreshLayout_collect.isRefreshing -> {
+                                    mAdapter.setNewData(collectBean.datas)
+                                    refreshLayout_collect.finishRefresh()
+                                }
+                                refreshLayout_collect.isLoading -> {
+                                    mAdapter.data.addAll(collectBean.datas!!)
+                                    refreshLayout_collect.finishLoadMore()
+                                    mAdapter.notifyDataSetChanged()
+                                }
+                                else -> mAdapter.setNewData(collectBean.datas)
                             }
-                            refreshLayout_collect.isLoading -> {
-                                mAdapter.data.addAll(collectBean.datas!!)
-                                refreshLayout_collect.finishLoadMore()
-                                mAdapter.notifyDataSetChanged()
-                            }
-                            else -> mAdapter.setNewData(collectBean.datas)
                         }
                     }
-                }
-            })
+                })
     }
 
     /**
@@ -122,23 +122,23 @@ class MyCollectActivity : AppCompatActivity() {
     @SuppressLint("CheckResult")
     private fun unCollectArticle(id: Int, originId: Int, position: Int) {
         mKProgressHUD = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true)
-            .setAnimationSpeed(2).setDimAmount(0.5f).show()
+                .setAnimationSpeed(2).setDimAmount(0.5f).show()
         RequestUtils.create(ApiService::class.java)
-            .unMyCollectArticle(id, originId)
-            .compose(RxHelper.handleResult())
-            .compose(RxHelper.bindToLifecycle(this))
-            .subscribe(object : NetCallBack<Any>() {
-                override fun onSuccess(t: Any) {
-                    mKProgressHUD.dismiss()
-                    mAdapter.remove(position)
-                    mAdapter.notifyDataSetChanged()
-                    T.showShort(getString(R.string.cancel_collection_success))
-                }
+                .unMyCollectArticle(id, originId)
+                .compose(RxHelper.handleResult())
+                .compose(RxHelper.bindToLifecycle(this))
+                .subscribe(object : NetCallBack<Any>() {
+                    override fun onSuccess(t: Any) {
+                        mKProgressHUD.dismiss()
+                        mAdapter.remove(position)
+                        mAdapter.notifyDataSetChanged()
+                        T.showShort(getString(R.string.cancel_collection_success))
+                    }
 
-                override fun updataLayout(flag: Int) {
+                    override fun updataLayout(flag: Int) {
 
-                }
-            })
+                    }
+                })
     }
 
     /**
@@ -149,6 +149,7 @@ class MyCollectActivity : AppCompatActivity() {
         refreshLayout_collect.setRefreshFooter(ClassicsFooter(this))
         refreshLayout_collect.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
+
                 mPageNo += 1
                 getArticleList(mPageNo)
             }

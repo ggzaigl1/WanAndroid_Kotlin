@@ -52,7 +52,7 @@ class WebViewActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
     fun initView() {
         mURl = intent.getStringExtra(WEB_URL)
-        mIsCollect = intent.getBooleanExtra(IS_COLLECT, mIsCollect!!)
+//        mURl = intent.getStringExtra("Link")
         web_view.settings.loadsImagesAutomatically = true
         web_view.isHorizontalScrollBarEnabled = false
         web_view.isVerticalScrollBarEnabled = false
@@ -133,11 +133,11 @@ class WebViewActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.web_share -> AndroidShareUtils.shareAllMsg(
-                ConfigUtils.getAppCtx(),
-                "一起玩Android",
-                mURl,
-                AndroidShareUtils.TEXT,
-                null
+                    ConfigUtils.getAppCtx(),
+                    "一起玩Android",
+                    mURl,
+                    AndroidShareUtils.TEXT,
+                    null
             )
             R.id.web_collection ->
                 if (TextUtils.isEmpty(SpfUtils.getSpfSaveStr(ConstantUtils.userName))) {
@@ -196,7 +196,7 @@ class WebViewActivity : AppCompatActivity() {
      * @return
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && web_view.canGoBack()){
+        if (keyCode == KeyEvent.KEYCODE_BACK && web_view.canGoBack()) {
             web_view.goBack()
             return true
         }

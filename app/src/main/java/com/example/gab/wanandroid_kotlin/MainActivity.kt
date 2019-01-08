@@ -28,12 +28,12 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private var mFragmentManager: FragmentManager? = null
-    private var mHomeFragment: HomeFragment? = null
-    private var mViewFragment: ViewFragment? = null
-    private var mNavigationViewFragment: NavigationViewFragment? = null
-    private var mStarFragment: StarFragment? = null
-    private var mOfficialAccountFragment: OfficialAccountFragment? = null
+    private lateinit var mFragmentManager: FragmentManager
+    private lateinit var mHomeFragment: HomeFragment
+    private lateinit var mViewFragment: ViewFragment
+    private lateinit var mNavigationViewFragment: NavigationViewFragment
+    private lateinit var mStarFragment: StarFragment
+    private lateinit var mOfficialAccountFragment: OfficialAccountFragment
 
     private var mFragment: Fragment? = null
     private var exitTime: Long = 0
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
         mStarFragment = StarFragment()
         mOfficialAccountFragment = OfficialAccountFragment()
         initBottomNavigation()
-        switchContent(mHomeFragment!!)
+        switchContent(mHomeFragment)
         setSupportActionBar(toolbar)
         navigation.setNavigationItemSelectedListener(this)
 
@@ -82,7 +82,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
         ivNevHeader.setOnClickListener {
             ivNevHeader.setOnClickListener { v -> JumpUtils.jumpFade(this@MainActivity, PhotoViewActivity::class.java, null) }
         }
-
         mTvNevHeaderLogin?.setOnClickListener { v ->
             val isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin)
             if (isLogin) {
@@ -110,11 +109,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
         if (mFragment != fragment) {
             if (!fragment.isAdded) {
                 if (mFragment != null) {
-                    mFragmentManager?.beginTransaction()?.hide(mFragment)?.commit()
+                    mFragmentManager.beginTransaction()?.hide(mFragment)?.commit()
                 }
-                mFragmentManager?.beginTransaction()?.add(R.id.fl_content, fragment)?.commit()
+                mFragmentManager.beginTransaction()?.add(R.id.fl_content, fragment)?.commit()
             } else {
-                mFragmentManager?.beginTransaction()?.hide(mFragment)?.show(fragment)?.commit()
+                mFragmentManager.beginTransaction()?.hide(mFragment)?.show(fragment)?.commit()
             }
             mFragment = fragment
         }
@@ -150,11 +149,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
 
     override fun onTabSelected(position: Int) {
         when (position) {
-            0 -> switchContent(mHomeFragment!!)
-            1 -> switchContent(mViewFragment!!)
-            2 -> switchContent(mNavigationViewFragment!!)
-            3 -> switchContent(mStarFragment!!)
-            4 -> switchContent(mOfficialAccountFragment!!)
+            0 -> switchContent(mHomeFragment)
+            1 -> switchContent(mViewFragment)
+            2 -> switchContent(mNavigationViewFragment)
+            3 -> switchContent(mStarFragment)
+            4 -> switchContent(mOfficialAccountFragment)
         }
     }
 

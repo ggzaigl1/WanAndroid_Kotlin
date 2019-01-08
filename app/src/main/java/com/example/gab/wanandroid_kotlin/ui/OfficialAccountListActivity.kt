@@ -1,5 +1,7 @@
 package com.example.gab.wanandroid_kotlin.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -15,6 +17,7 @@ import com.example.gab.wanandroid_kotlin.web.WebViewActivity
 import com.ggz.baselibrary.retrofit.NetCallBack
 import com.ggz.baselibrary.retrofit.RequestUtils
 import com.ggz.baselibrary.retrofit.RxHelper
+import com.ggz.baselibrary.utils.JumpUtils
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
@@ -73,6 +76,12 @@ class OfficialAccountListActivity : AppCompatActivity() {
     private fun initRecyle() {
         rv_official_account.layoutManager = LinearLayoutManager(this)
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+//            val bundle = Bundle()
+//            bundle.putString("Link", mAdapter.data[position].link)
+//            bundle.putInt("id", mAdapter.data[position].id)
+//            bundle.putBoolean("isCollect", mAdapter.data[position].isCollect)
+//            JumpUtils.jumpFade(this@OfficialAccountListActivity, WebViewActivity::class.java, bundle)
+
             WebViewActivity.startWebActivity(this, mAdapter.data[position].link!!
                     , mAdapter.data[position].id
                     , mAdapter.data[position].isCollect)
