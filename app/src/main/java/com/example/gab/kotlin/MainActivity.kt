@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
 
     private var mFragment: Fragment? = null
     private var exitTime: Long = 0
+    private val time = 2000
     private val mTvNevHeaderLogin: TextView? = null
     private val mTvNevHeaderTitle: TextView? = null
 
@@ -173,17 +174,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_DOWN) {
-            val time = 2000
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
             when {
-                drawer_layout.isDrawerOpen(GravityCompat.START) -> drawer_layout.closeDrawer(GravityCompat.START)
-                (System.currentTimeMillis() - exitTime) >= time -> {
+                drawer_layout.isDrawerOpen(GravityCompat.START) -> {
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                }
+                (System.currentTimeMillis() - exitTime) > time -> {
                     T.CustomToast.INSTANCE.showToast(R.string.exit_app)
                     exitTime = System.currentTimeMillis()
                 }
-                else -> finish()
+                else -> {
+                    finish()
+                }
             }
+            return true
         }
         return super.onKeyDown(keyCode, event)
     }
