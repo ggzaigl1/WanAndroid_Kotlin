@@ -9,7 +9,6 @@ import com.ggz.baselibrary.utils.ConstantUtils;
 import com.ggz.baselibrary.utils.FileUtils;
 import com.ggz.baselibrary.utils.GsonUtils;
 import com.ggz.baselibrary.utils.L;
-import com.ggz.baselibrary.utils.T;
 import com.ggz.baselibrary.utils.ThreadUtils;
 import com.ggz.baselibrary.utils.TransfmtUtils;
 import com.ggz.baselibrary.utils.cache.ACache;
@@ -276,7 +275,7 @@ public class DownManager {
         }
 
         if (downInfo.getStateInte() == DownInfo.STATUS_COMPLETE) {
-            T.showLong("此任务已完成");
+//            T.showLong("此任务已完成");
             downInfos.remove(downInfo);
             if (null != loadListener) {
                 loadListener.onProgress(downInfo.getReadLength().get(),
@@ -285,7 +284,7 @@ public class DownManager {
                 return;
             }
         } else if (downInfo.getStateInte() == DownInfo.STATUS_PAUSED || downInfo.getStateInte() == DownInfo.STATUS_NOT_DOWNLOAD) {
-            T.showLong("开始下载");
+//            T.showLong("开始下载");
             if (null != loadListener) {
                 loadListener.onProgress(downInfo.getReadLength().get(),
                         downInfo.getCountLength(),

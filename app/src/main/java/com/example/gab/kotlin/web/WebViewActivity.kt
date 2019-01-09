@@ -29,6 +29,23 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
     private var mIsCollect: Boolean? = null
     private var toolbar: Toolbar? = null
 
+    //在kotlin中的静态方法和变量是用companion object包裹，调用的时候用到Companion
+    companion object {
+        private const val WEB_URL = "web_url"
+        private const val WEB_ID = "web_id"
+        private const val IS_COLLECT = "is_collect"
+
+        fun startWebActivity(context: Context, url: String, id: Int, isCollect: Boolean) {
+            val intent = Intent(context, WebViewActivity::class.java)
+            intent.apply {
+                intent.putExtra(WEB_URL, url)
+                intent.putExtra(WEB_ID, id)
+                intent.putExtra(IS_COLLECT, isCollect)
+            }
+            context.startActivity(intent)
+        }
+    }
+
     override fun isShowHeadView(): Boolean {
         return true
     }
@@ -51,43 +68,24 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
     override fun reTry() {
     }
 
-    //在kotlin中的静态方法和变量是用companion object包裹，调用的时候用到Companion
-    companion object {
-        private const val WEB_URL = "web_url"
-        private const val WEB_ID = "web_id"
-        private const val IS_COLLECT = "is_collect"
-
-        fun startWebActivity(context: Context, url: String, id: Int, isCollect: Boolean) {
-            val intent = Intent(context, WebViewActivity::class.java)
-            intent.putExtra(WEB_URL, url)
-            intent.putExtra(WEB_ID, id)
-            intent.putExtra(IS_COLLECT, isCollect)
-            context.startActivity(intent)
-        }
-    }
-
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
     fun initView() {
-        mURl = intent.getStringExtra(WEB_URL)
-//        mURl = intent.getStringExtra("Link")
-        web_view.settings.loadsImagesAutomatically = true
-        web_view.isHorizontalScrollBarEnabled = false
-        web_view.isVerticalScrollBarEnabled = false
-        web_view.loadUrl(mURl)
-
-        val webSettings = web_view.settings
-        webSettings.domStorageEnabled = true
-        webSettings.javaScriptEnabled = true
-        webSettings.setSupportZoom(true)
-        webSettings.builtInZoomControls = true
-        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //两者都可以
-            webSettings.mixedContentMode = webSettings.mixedContentMode
-            //mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        intent.let {
+            mURl = it.getStringExtra(WEB_URL)
         }
-        web_view.webViewClient = WebViewClient()
+        web_view.settings.run {
+            loadsImagesAutomatically = true
+            domStorageEnabled = true
+            javaScriptEnabled = true
+            setSupportZoom(true)
+            builtInZoomControls = true
+            cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //两者都可以
+                mixedContentMode = mixedContentMode
+                //mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
+        }
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         web_view.webChromeClient = object : WebChromeClient() {
             //用网页的标题来设置自己的标题栏
@@ -117,6 +115,8 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
             }
         }
 
+
+
         web_view.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 web_view.loadUrl(url)
@@ -141,31 +141,34 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
                 view.scrollTo(0, position)
             }
         }
+        web_view.loadUrl(mURl)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.activity_web_more, menu)
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.web_share -> {
-                AndroidShareUtils.shareAllMsg(ConfigUtils.getAppCtx(), "一起玩Android", mURl, AndroidShareUtils.TEXT, null)
+                AndroidShareUtils.shareAllMsg(ConfigUtils.getAppCtx(), "分享到", mURl, AndroidShareUtils.TEXT, null)
             }
             R.id.web_collection -> {
                 if (TextUtils.isEmpty(SpfUtils.getSpfSaveStr(ConstantUtils.userName))) {
-                    T.showShort(R.string.collect_login)
+                    ToastUtils.showShort(R.string.collect_login)
                 } else {
                     if (mIsCollect!!) {
-                        T.showShort("已经收藏")
+                        ToastUtils.showShort("已经收藏")
                     }
                 }
             }
             R.id.web_browser -> {
                 val intent = Intent()
-                intent.data = Uri.parse(mURl)
-                intent.action = Intent.ACTION_VIEW
+                intent.run {
+                    data = Uri.parse(mURl)
+                    action = Intent.ACTION_VIEW
+                }
                 startActivity(intent)
             }
         }
@@ -173,18 +176,6 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
-//         if (menu != null) {
-//            if ("MenuBuilder".equalsIgnoreCase(menu.getClass().getSimpleName())) {
-//                try {
-//                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-//                    method.setAccessible(true);
-//                    method.invoke(menu, true);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
         if (menu != null) {
             if ("MenuBuilder".equals(menu.javaClass.simpleName, ignoreCase = true)) {
                 try {
@@ -211,12 +202,14 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
 
     override fun onDestroy() {
         if (web_view != null) {
-            web_view.loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
-            web_view.removeAllViews()
-            web_view.tag = null
-            web_view.clearHistory()
-            (web_view.parent as ViewGroup).removeView(web_view)
-            web_view.destroy()
+            web_view.run {
+                loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
+                removeAllViews()
+                tag = null
+                clearHistory()
+                (parent as ViewGroup).removeView(web_view)
+                destroy()
+            }
         }
         super.onDestroy()
     }
