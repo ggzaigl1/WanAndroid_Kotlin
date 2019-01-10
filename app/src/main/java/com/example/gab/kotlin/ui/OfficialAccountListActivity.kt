@@ -11,7 +11,7 @@ import com.example.gab.kotlin.R
 import com.example.gab.kotlin.adapter.BaseAdapter
 import com.example.gab.kotlin.api.ApiService
 import com.example.gab.kotlin.base.BaseActivity
-import com.example.gab.kotlin.bean.BaseBean
+import com.example.gab.kotlin.bean.ArticleBean
 import com.example.gab.kotlin.web.WebViewActivity
 import com.ggz.baselibrary.application.IBaseActivity
 import com.ggz.baselibrary.retrofit.NetCallBack
@@ -63,21 +63,21 @@ class OfficialAccountListActivity : BaseActivity(), IBaseActivity {
                 .getWxarticle(mId, mPageNo)
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(this))
-                .subscribe(object : NetCallBack<BaseBean>() {
-                    override fun onSuccess(baseBean: BaseBean?) {
-                        if (baseBean != null) {
+                .subscribe(object : NetCallBack<ArticleBean>() {
+                    override fun onSuccess(articleBean: ArticleBean?) {
+                        if (articleBean != null) {
                             mKProgressHUD?.dismiss()
                             when {
                                 srl_official_account.isRefreshing -> {
-                                    mAdapter.setNewData(baseBean.datas)
+                                    mAdapter.setNewData(articleBean.datas)
                                     srl_official_account.finishRefresh()
                                 }
                                 srl_official_account.isLoading -> {
-                                    mAdapter.data.addAll(baseBean.datas!!)
+                                    mAdapter.data.addAll(articleBean.datas!!)
                                     srl_official_account.finishLoadMore()
                                     mAdapter.notifyDataSetChanged()
                                 }
-                                else -> mAdapter.setNewData(baseBean.datas)
+                                else -> mAdapter.setNewData(articleBean.datas)
                             }
                         }
                     }

@@ -61,7 +61,7 @@ interface ApiService {
      */
     @Headers("url_name:user")
     @GET("article/list/{id}/json")
-    fun getArticleHomeList(@Path("id") page: Int): Observable<BeanModule<BaseBean>>
+    fun getArticleHomeList(@Path("id") page: Int): Observable<BeanModule<ArticleBean>>
 
     /**
      * 体系数据
@@ -79,7 +79,7 @@ interface ApiService {
      */
     @Headers("url_name:user")
     @GET("article/list/{id}/json")
-    fun getArticleList(@Path("id") page: Int, @Query("cid") cid: Int): Observable<BeanModule<BaseBean>>
+    fun getArticleList(@Path("id") page: Int, @Query("cid") cid: Int): Observable<BeanModule<ArticleBean>>
 
     /**
      * 常用网站
@@ -126,7 +126,7 @@ interface ApiService {
      */
     @Headers("url_name:user")
     @GET("project/list/{pageNum}/json")
-    fun getProjectList(@Path("pageNum") page: Int, @Query("cid") cid: Int): Observable<BeanModule<BaseBean>>
+    fun getProjectList(@Path("pageNum") page: Int, @Query("cid") cid: Int): Observable<BeanModule<ArticleBean>>
 
     /**
      * 最新项目tab (首页的第二个tab)
@@ -136,7 +136,7 @@ interface ApiService {
      */
     @Headers("url_name:user")
     @GET("article/listproject/{pageNum}/json")
-    fun getListProject(@Path("pageNum") pageNum: Int): Observable<BeanModule<BaseBean>>
+    fun getListProject(@Path("pageNum") pageNum: Int): Observable<BeanModule<ArticleBean>>
 
     /**
      * 收藏文章列表
@@ -203,7 +203,7 @@ interface ApiService {
     @FormUrlEncoded
     @Headers("url_name:user")
     @POST("article/query/{pageNum}/json")
-    fun getQuery(@Path("pageNum") pageNum: Int, @Field("k") queryKey: String): Observable<BeanModule<BaseBean>>
+    fun getQuery(@Path("pageNum") pageNum: Int, @Field("k") queryKey: String): Observable<BeanModule<ArticleBean>>
 
     /**
      * 获取公众号列表
@@ -223,7 +223,7 @@ interface ApiService {
      */
     @Headers("url_name:user")
     @GET("wxarticle/list/{ID}/{pageNo}/json")
-    fun getWxarticle(@Path("ID") id: Int, @Path("pageNo") pageNo: Int): Observable<BeanModule<BaseBean>>
+    fun getWxarticle(@Path("ID") id: Int, @Path("pageNo") pageNo: Int): Observable<BeanModule<ArticleBean>>
 
 
     /**
@@ -236,7 +236,7 @@ interface ApiService {
      */
     @Headers("url_name:user")
     @GET("wxarticle/list/{ID}/{pageNo}/json")
-    fun getWxarticleQuery(@Path("ID") id: Int, @Path("pageNo") pageNo: Int, @Query("k") queryKey: String): Observable<BeanModule<BaseBean>>
+    fun getWxarticleQuery(@Path("ID") id: Int, @Path("pageNo") pageNo: Int, @Query("k") queryKey: String): Observable<BeanModule<ArticleBean>>
 
     /**
      * 美图图片

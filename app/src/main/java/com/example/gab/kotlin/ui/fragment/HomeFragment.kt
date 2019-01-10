@@ -1,9 +1,7 @@
 package com.example.gab.kotlin.ui.fragment
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -11,8 +9,8 @@ import com.example.gab.kotlin.R
 import com.example.gab.kotlin.adapter.BaseAdapter
 import com.example.gab.kotlin.api.ApiService
 import com.example.gab.kotlin.base.BaseFragment
+import com.example.gab.kotlin.bean.ArticleBean
 import com.example.gab.kotlin.bean.BannerBean
-import com.example.gab.kotlin.bean.BaseBean
 import com.example.gab.kotlin.view.BannerImageLoader
 import com.example.gab.kotlin.web.WebViewActivity
 import com.ggz.baselibrary.retrofit.NetCallBack
@@ -99,21 +97,21 @@ class HomeFragment : BaseFragment() {
                 .getArticleHomeList(mPageNo)
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(mContext))
-                .subscribe(object : NetCallBack<BaseBean>() {
-                    override fun onSuccess(baseBean: BaseBean) {
+                .subscribe(object : NetCallBack<ArticleBean>() {
+                    override fun onSuccess(articleBean: ArticleBean) {
                         mKProgressHUD.dismiss()
-                        if (baseBean.datas?.size != 0) {
+                        if (articleBean.datas.isNotEmpty()) {
                             when {
                                 home_srl.isRefreshing -> {
-                                    mAdapter.setNewData(baseBean.datas)
+                                    mAdapter.setNewData(articleBean.datas)
                                     home_srl.finishRefresh()
                                 }
                                 home_srl.isLoading -> {
-                                    mAdapter.data.addAll(baseBean.datas!!)
+                                    mAdapter.data.addAll(articleBean.datas!!)
                                     home_srl.finishLoadMore()
                                     mAdapter.notifyDataSetChanged()
                                 }
-                                else -> mAdapter.setNewData(baseBean.datas)
+                                else -> mAdapter.setNewData(articleBean.datas)
                             }
                         } else {
                             when {
