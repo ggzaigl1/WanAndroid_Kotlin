@@ -57,7 +57,6 @@ class HomeFragment : BaseFragment() {
         val banner = mContext.findViewById<Banner>(R.id.banner_news)
         banner.run {
             setImageLoader(BannerImageLoader())
-            setDelayTime(2000)
             setIndicatorGravity(BannerConfig.RIGHT)
             setImages(pic)
             start()
@@ -142,21 +141,23 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun initRefresh() {
-        home_srl.setRefreshHeader(ClassicsHeader(mContext))
-        home_srl.setRefreshFooter(ClassicsFooter(mContext))
-        home_srl.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
-            override fun onLoadMore(refreshLayout: RefreshLayout?) {
-                mPageNo += 1
-                getData(mPageNo)
-            }
+        home_srl.run {
+            setRefreshHeader(ClassicsHeader(mContext))
+            setRefreshFooter(ClassicsFooter(mContext))
+            setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+                override fun onLoadMore(refreshLayout: RefreshLayout?) {
+                    mPageNo += 1
+                    getData(mPageNo)
+                }
 
-            override fun onRefresh(refreshLayout: RefreshLayout?) {
-                mPageNo = 0
-                getData(0)
-                getBanner()
-                mKProgressHUD.dismiss()
-            }
-        })
+                override fun onRefresh(refreshLayout: RefreshLayout?) {
+                    mPageNo = 0
+                    getData(0)
+                    getBanner()
+                    mKProgressHUD.dismiss()
+                }
+            })
+        }
     }
 
     override fun onStart() {

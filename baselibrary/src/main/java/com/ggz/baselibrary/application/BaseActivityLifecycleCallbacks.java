@@ -27,7 +27,6 @@ import com.ggz.baselibrary.utils.LogUtils;
 import com.ggz.baselibrary.utils.ResourceUtils;
 import com.ggz.baselibrary.utils.os.OSUtils;
 
-import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
 
 /**
@@ -87,9 +86,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             activityBean.setOrientoinListener(orientoinListener);
         }
 
-        //设置 黄油刀 简化 Android 样板代码
-        activityBean.setUnbinder(ButterKnife.bind(activity));
-
         //设置 activity 多状态布局
         if (activity instanceof StatusLayout.OnSetStatusView) {
             StatusLayout.OnSetStatusView setStatusView = (StatusLayout.OnSetStatusView) activity;
@@ -143,10 +139,6 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
                 .getSerializableExtra("ActivityBean");
 
         if (null != activityBean) {
-            //解绑定 黄油刀
-            if (null != activityBean.getUnbinder()) {
-                activityBean.getUnbinder().unbind();
-            }
             //销毁 屏幕旋转监听
             if (null != activityBean.getOrientoinListener()) {
                 activityBean.getOrientoinListener().disable();

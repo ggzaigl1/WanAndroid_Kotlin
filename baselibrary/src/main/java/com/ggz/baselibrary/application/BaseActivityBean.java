@@ -4,7 +4,6 @@ import com.ggz.baselibrary.statuslayout.StatusLayoutManager;
 
 import java.io.Serializable;
 
-import butterknife.Unbinder;
 import io.reactivex.subjects.BehaviorSubject;
 
 /**
@@ -14,18 +13,6 @@ import io.reactivex.subjects.BehaviorSubject;
  * @date 2017/5/18
  */
 public class BaseActivityBean implements Serializable {
-
-    private Unbinder unbinder;
-
-    public Unbinder getUnbinder() {
-        return unbinder;
-    }
-
-    public void setUnbinder(Unbinder unbinder) {
-        this.unbinder = unbinder;
-    }
-
-
 
     private BaseOrientationListener orientoinListener;
 
@@ -37,7 +24,6 @@ public class BaseActivityBean implements Serializable {
         this.orientoinListener = orientoinListener;
     }
 
-
     private StatusLayoutManager slManager;
 
     public StatusLayoutManager getSlManager() {
@@ -47,7 +33,6 @@ public class BaseActivityBean implements Serializable {
     public void setSlManager(StatusLayoutManager slManager) {
         this.slManager = slManager;
     }
-
 
     private BehaviorSubject<String> subject;
 

@@ -24,6 +24,13 @@ android {
             buildConfigField "boolean", "LEO_DEBUG", "false"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // 清理无用资源
+            shrinkResources true
+            // 压缩优化
+            zipAlignEnabled true
+            // 支持本地化整理
+            pseudoLocalesEnabled true
         }
 
 //        debug {

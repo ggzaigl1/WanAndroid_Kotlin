@@ -22,8 +22,6 @@ import com.ggz.baselibrary.utils.T;
 import com.ggz.baselibrary.utils.cache.ACache;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Fragment 基类
@@ -39,7 +37,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected KProgressHUD mKProgressHUD;
     protected AppCompatActivity mContext;
     protected View mRootView;
-    protected Unbinder unbinder;
 
     //视图是否已经初始化完毕
     private boolean isViewReady;
@@ -76,7 +73,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 }
             }
 //        }
-        unbinder = ButterKnife.bind(this, mRootView);
         LogUtils.e(TAG, "onCreateView()");
         return mRootView;
     }
@@ -255,10 +251,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onDestroy() {
         super.onDestroy();
         LogUtils.e(TAG, "onDestroy()");
-
-        if (null != unbinder) {
-            unbinder.unbind();
-        }
 
         if (mKProgressHUD != null) {
             mKProgressHUD.dismiss();

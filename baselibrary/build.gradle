@@ -48,10 +48,6 @@ dependencies {
     api "com.android.support:exifinterface:$var.supportLibraryVersion"
 
     api 'com.android.support:multidex:1.0.3'
-
-    //    butterknife
-    api 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //    dagger2
     api 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
@@ -87,18 +83,9 @@ dependencies {
     api 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
     //对话框 Material Dialogs
     api 'com.afollestad.material-dialogs:core:0.9.6.0'
-    // Lottie是一个支持Android、iOS、React Native，并由 Adobe After Effects制作aep格式的动画，然后经由bodymovin插件转化渲染为json格式可被移动端本地识别解析的Airbnb开源库。
-    //    Lottie实时呈现After Effects动画效果，让应用程序可以像使用静态图片一样轻松地使用动画 Lottie支持API 14及以上。
-    api 'com.airbnb.android:lottie:2.3.0'
-    //星星
-    api 'me.zhanghai.android.materialratingbar:library:1.2.0'
     //Spots progress dialog  https://github.com/d-max/spots-dialog
     //加载框
     api 'com.kaopiz:kprogresshud:1.1.0'
-    //蒲公英 sdk
-    api 'com.pgyersdk:sdk:3.0.2'
-    // https://github.com/JessYanCoding/AndroidAutoSize  屏幕适配
-    // https://juejin.im/post/5bce688e6fb9a05cf715d1c2 对应讲解
     api 'me.jessyan:autosize:1.0.1'
     //https://github.com/google/flexbox-layout
 //    api 'com.google.android:flexbox:0.3.2'
@@ -107,11 +94,8 @@ dependencies {
     api 'com.google.android:flexbox:1.0.0'
     // 精仿iOSAlertViewController控件
     api 'com.bigkoo:alertview:1.0.3'
-    //加载框
-    api 'com.kaopiz:kprogresshud:1.1.0'
     //垂直纵向的TabLayout、轻松创建纵向导航 https://github.com/qstumn/VerticalTabLayout
     api 'q.rorbin:VerticalTabLayout:1.2.5'
-    api 'com.github.SheHuan:StatusView:1.0.5'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
