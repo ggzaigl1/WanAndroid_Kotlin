@@ -95,7 +95,7 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
         })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(integer -> LogUtils.e("aaaab", "" + Thread.currentThread().getName() ));
+                .subscribe(integer -> LogUtils.e("aaaab", "" + Thread.currentThread().getName()));
 
         Intent intent = getIntent();
         if (null != savedInstanceState) {
@@ -114,11 +114,6 @@ public class StartActivity extends AppCompatActivity implements IBaseActivity {
 
     @Override
     public void onClick(View v) {
-
-    }
-
-    @Override
-    public void reTry() {
 
     }
 }

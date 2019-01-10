@@ -37,7 +37,7 @@
                     app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
                     app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
                     app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways"
-                    >
+            >
                 <!--layout_collapseMode
                 app:layout_scrollFlags="scroll|exitUntilCollapsed" 滑动显示toolbar
                  app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways" //滑动隐藏toolBar
@@ -45,11 +45,10 @@
                  1，pin 没有视觉差！
                 2，parallax  有视觉差   可以配合layout_collapseParallaxMultiplier 视觉差因子 设置  val  0-1-->
 
-                <com.bigkoo.convenientbanner.ConvenientBanner
-                        android:id="@+id/banner_home"
+                <com.youth.banner.Banner
+                        android:id="@+id/banner_news"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        app:canLoop="true"/>
+                        android:layout_height="200dp"/>
 
                 <!--<ImageView-->
                 <!--android:id="@+id/headImage"-->
@@ -64,17 +63,17 @@
                 <!--app:layout_scrollFlags="scroll|snap|enterAlways|enterAlwaysCollapsed" />-->
 
                 <!--<android.support.v7.widget.Toolbar-->
-                        <!--android:id="@+id/toolbar"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="?attr/actionBarSize"-->
-                        <!--app:layout_collapseMode="pin"-->
-                        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light">-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--app:layout_collapseMode="pin"-->
+                <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light">-->
 
-                    <!--<TextView-->
-                    <!--android:id="@+id/tvName"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Google Assistant"/>-->
+                <!--<TextView-->
+                <!--android:id="@+id/tvName"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Google Assistant"/>-->
                 <!--</android.support.v7.widget.Toolbar>-->
             </android.support.design.widget.CollapsingToolbarLayout>
             <!--标题跟随滚动 1.toolbar  app:layout_scrollFlags="scroll|enterAlways|snap"
@@ -89,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                />
+        />
 
     </android.support.design.widget.CoordinatorLayout>
 </com.scwang.smartrefresh.layout.SmartRefreshLayout>

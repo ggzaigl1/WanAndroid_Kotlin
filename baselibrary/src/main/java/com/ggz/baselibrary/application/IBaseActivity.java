@@ -42,9 +42,4 @@ public interface IBaseActivity extends View.OnClickListener{
      */
     @Override
     void onClick(View v);
-
-    /**
-     * 多布局 点击重试
-     */
-    void reTry();
 }

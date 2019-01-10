@@ -1,16 +1,19 @@
 package com.example.gab.kotlin.ui.fragment
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bigkoo.convenientbanner.listener.OnItemClickListener
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.gab.kotlin.R
 import com.example.gab.kotlin.adapter.BaseAdapter
 import com.example.gab.kotlin.api.ApiService
 import com.example.gab.kotlin.base.BaseFragment
+import com.example.gab.kotlin.bean.BannerBean
 import com.example.gab.kotlin.bean.BaseBean
+import com.example.gab.kotlin.view.BannerImageLoader
 import com.example.gab.kotlin.web.WebViewActivity
 import com.ggz.baselibrary.retrofit.NetCallBack
 import com.ggz.baselibrary.retrofit.RequestUtils
@@ -20,6 +23,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import com.youth.banner.Banner
+import com.youth.banner.BannerConfig
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
 
@@ -27,14 +32,14 @@ import java.util.*
  * Created by 初夏小溪
  * data :2019/1/7 0007 9:32
  */
-class HomeFragment : BaseFragment(), OnItemClickListener {
+class HomeFragment : BaseFragment() {
 
     val mAdapter = BaseAdapter(ArrayList())
     var mPageNo = 0
+//    private lateinit var banner: Banner
 
     override fun initView(view: View?) {
         initRecyle()
-
     }
 
     override fun setContentLayout(): Int {
@@ -50,30 +55,41 @@ class HomeFragment : BaseFragment(), OnItemClickListener {
         return false
     }
 
-    override fun onItemClick(position: Int) {
+    private fun bannerView(pic: List<String>, urls: List<String>) {
+        val banner = mContext.findViewById<Banner>(R.id.banner_news)
+        banner.run {
+            setImageLoader(BannerImageLoader())
+            setDelayTime(2000)
+            setIndicatorGravity(BannerConfig.RIGHT)
+            setImages(pic)
+            start()
+            setOnBannerListener {
+                WebViewActivity.startWebActivity(mContext, urls[it])
+            }
+        }
     }
 
-    private val pics = arrayListOf<String>()
-    var images = arrayOf("http://img2.imgtn.bdimg.com/it/u=3093785514,1341050958&fm=21&gp=0.jpg",
-            "http://img2.3lian.com/2014/f2/37/d/40.jpg", "http://d.3987.com/sqmy_131219/001.jpg",
-            "http://img2.3lian.com/2014/f2/37/d/39.jpg", "http://www.8kmm.com/UploadFiles/2012/8/201208140920132659.jpg",
-            "http://f.hiphotos.baidu.com/image/h%3D200/sign=1478eb74d5a20cf45990f9df460b4b0c/d058ccbf6c81800a5422e5fdb43533fa838b4779.jpg",
-            "http://f.hiphotos.baidu.com/image/pic/item/09fa513d269759ee50f1971ab6fb43166c22dfba.jpg")
+    private fun getBanner() {
+        RequestUtils.create(ApiService::class.java)
+                .getBanner()
+                .compose(RxHelper.handleResult())
+                .compose(RxHelper.bindToLifecycle(mContext))
+                .subscribe(object : NetCallBack<List<BannerBean>>() {
+                    override fun onSuccess(bannerBean: List<BannerBean>) {
+                        val images = arrayListOf<String>()
+                        val urls = arrayListOf<String>()
+                        for (bannerData in bannerBean) {
+                            images.add(bannerData.imagePath)
+                            urls.add(bannerData.url)
+                        }
+                        bannerView(images, urls)
+                    }
 
+                    override fun updataLayout(flag: Int) {
+                    }
 
-//    private fun bannerView(urls: List<String>, pic: List<String>) {
-//        banner_home.setPages(CBViewHolderCreator {
-//            NetworkImageHolderView()
-//        },)
-//                .setPageIndicator(intArrayOf(R.drawable.shape_banner_indicator1, R.drawable.shape_banner_indicator2))
-//                .setPointViewVisible(true)
-//                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT)
-//                .setPageTransformer(AccordionTransformer())
-//                .setOnItemClickListener { position ->
-//                    val bundle = Bundle()
-//                    bundle.putString("Link", urls[position])
-//                }.isManualPageable = true
-//    }
+                })
+    }
 
     @SuppressLint("CheckResult")
     private fun getData(mPageNo: Int) {
@@ -119,9 +135,7 @@ class HomeFragment : BaseFragment(), OnItemClickListener {
         home_recyclerView.run {
             layoutManager = LinearLayoutManager(mContext)
             mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-                WebViewActivity.startWebActivity(mContext, mAdapter.data[position].link!!,
-                        mAdapter.data[position].id,
-                        mAdapter.data[position].isCollect)
+                WebViewActivity.startWebActivity(mContext, mAdapter.data[position].link!!)
                 mContext.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
             adapter = mAdapter
@@ -141,9 +155,15 @@ class HomeFragment : BaseFragment(), OnItemClickListener {
             override fun onRefresh(refreshLayout: RefreshLayout?) {
                 mPageNo = 0
                 getData(0)
+                getBanner()
                 mKProgressHUD.dismiss()
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        banner_news.startAutoPlay()
     }
 
     override fun onPause() {
@@ -152,6 +172,11 @@ class HomeFragment : BaseFragment(), OnItemClickListener {
             home_srl.isRefreshing -> home_srl.finishRefresh()
             home_srl.isLoading -> home_srl.finishLoadMore()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        banner_news.stopAutoPlay()
     }
 }
 

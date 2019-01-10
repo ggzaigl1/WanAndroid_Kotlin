@@ -32,15 +32,11 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
     //在kotlin中的静态方法和变量是用companion object包裹，调用的时候用到Companion
     companion object {
         private const val WEB_URL = "web_url"
-        private const val WEB_ID = "web_id"
-        private const val IS_COLLECT = "is_collect"
 
-        fun startWebActivity(context: Context, url: String, id: Int, isCollect: Boolean) {
+        fun startWebActivity(context: Context, url: String) {
             val intent = Intent(context, WebViewActivity::class.java)
             intent.apply {
                 intent.putExtra(WEB_URL, url)
-                intent.putExtra(WEB_ID, id)
-                intent.putExtra(IS_COLLECT, isCollect)
             }
             context.startActivity(intent)
         }
@@ -63,9 +59,6 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
     }
 
     override fun onClick(v: View?) {
-    }
-
-    override fun reTry() {
     }
 
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
@@ -114,8 +107,6 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
                 }
             }
         }
-
-
 
         web_view.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {

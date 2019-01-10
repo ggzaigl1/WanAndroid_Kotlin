@@ -110,28 +110,30 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
         if (mFragment != fragment) {
             if (!fragment.isAdded) {
                 if (mFragment != null) {
-                    mFragmentManager.beginTransaction()?.hide(mFragment)?.commit()
+                    mFragmentManager.beginTransaction().hide(mFragment!!).commit()
                 }
-                mFragmentManager.beginTransaction()?.add(R.id.fl_content, fragment)?.commit()
+                mFragmentManager.beginTransaction().add(R.id.fl_content, fragment).commit()
             } else {
-                mFragmentManager.beginTransaction()?.hide(mFragment)?.show(fragment)?.commit()
+                mFragmentManager.beginTransaction().hide(mFragment!!).show(fragment).commit()
             }
             mFragment = fragment
         }
     }
 
     private fun initBottomNavigation() {
-        bottom_navigation.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
-                .setMode(BottomNavigationBar.MODE_FIXED)
-                .setInActiveColor("#2c2c2c")
-                .addItem(BottomNavigationItem(R.drawable.vector_home, getString(R.string.nav_home_title)).setActiveColorResource(R.color.pink))
-                .addItem(BottomNavigationItem(R.drawable.vector_view_headline, getString(R.string.nav_system_title)).setActiveColorResource(R.color.pink))
-                .addItem(BottomNavigationItem(R.drawable.vector_live_tv, getString(R.string.nav_view_title)).setActiveColorResource(R.color.pink))
-                .addItem(BottomNavigationItem(R.drawable.vector_find, getString(R.string.nav_project_title)).setActiveColorResource(R.color.pink))
-                .addItem(BottomNavigationItem(R.drawable.vector_official_account, getString(R.string.official_account)).setActiveColorResource(R.color.pink))
-                .setFirstSelectedPosition(0)
-                .setTabSelectedListener(this)
-                .initialise()
+        bottom_navigation.run {
+            setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
+            setMode(BottomNavigationBar.MODE_FIXED)
+            setInActiveColor("#2c2c2c")
+            addItem(BottomNavigationItem(R.drawable.vector_home, getString(R.string.nav_home_title)).setActiveColorResource(R.color.pink))
+            addItem(BottomNavigationItem(R.drawable.vector_view_headline, getString(R.string.nav_system_title)).setActiveColorResource(R.color.pink))
+            addItem(BottomNavigationItem(R.drawable.vector_live_tv, getString(R.string.nav_view_title)).setActiveColorResource(R.color.pink))
+            addItem(BottomNavigationItem(R.drawable.vector_find, getString(R.string.nav_project_title)).setActiveColorResource(R.color.pink))
+            addItem(BottomNavigationItem(R.drawable.vector_official_account, getString(R.string.official_account)).setActiveColorResource(R.color.pink))
+            setFirstSelectedPosition(0)
+            setTabSelectedListener(this@MainActivity)
+            initialise()
+        }
     }
 
 

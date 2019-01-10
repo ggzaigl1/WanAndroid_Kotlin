@@ -2,7 +2,6 @@ package com.example.gab.kotlin.ui
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,7 @@ import kotlinx.android.synthetic.main.activity_official_account.*
  */
 class OfficialAccountListActivity : BaseActivity(), IBaseActivity {
 
-    var mId = 0
+    private var mId = 0
     var mPageNo = 0
     var mAdapter = BaseAdapter(ArrayList())
 
@@ -47,16 +46,15 @@ class OfficialAccountListActivity : BaseActivity(), IBaseActivity {
     }
 
     override fun initData(activity: Activity?, savedInstanceState: Bundle?) {
-        mId = intent.getIntExtra("id", -1)
+        intent.let {
+            mId = it.getIntExtra("id", -1)
+        }
         initRecycler()
         initRefresh()
         getChaptersList(mPageNo)
     }
 
     override fun onClick(v: View?) {
-    }
-
-    override fun reTry() {
     }
 
     private fun getChaptersList(mPageNo: Int) {
@@ -91,35 +89,36 @@ class OfficialAccountListActivity : BaseActivity(), IBaseActivity {
     }
 
     private fun initRecycler() {
-        rv_official_account.layoutManager = LinearLayoutManager(this)
-        mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            WebViewActivity.startWebActivity(this, mAdapter.data[position].link!!
-                    , mAdapter.data[position].id
-                    , mAdapter.data[position].isCollect)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        rv_official_account.run {
+            layoutManager = LinearLayoutManager(this@OfficialAccountListActivity)
+            mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+                WebViewActivity.startWebActivity(this@OfficialAccountListActivity, mAdapter.data[position].link!!)
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            adapter = mAdapter
+            mAdapter.emptyView = LayoutInflater.from(this@OfficialAccountListActivity).inflate(R.layout.activity_null_data, parent as ViewGroup, false)
         }
-        rv_official_account.adapter = mAdapter
-        mAdapter.emptyView = LayoutInflater.from(this).inflate(R.layout.activity_null_data, rv_official_account.parent as ViewGroup, false)
-
     }
 
     /**
      * 分页加载数据
      */
     private fun initRefresh() {
-        srl_official_account.setRefreshHeader(ClassicsHeader(this))
-        srl_official_account.setRefreshFooter(ClassicsFooter(this))
-        srl_official_account.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                mPageNo += 1
-                getChaptersList(mPageNo)
-            }
+        srl_official_account.run {
+            setRefreshHeader(ClassicsHeader(this@OfficialAccountListActivity))
+            setRefreshFooter(ClassicsFooter(this@OfficialAccountListActivity))
+            setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+                override fun onLoadMore(refreshLayout: RefreshLayout) {
+                    mPageNo += 1
+                    getChaptersList(mPageNo)
+                }
 
-            override fun onRefresh(refreshLayout: RefreshLayout) {
-                mPageNo = 0
-                getChaptersList(mPageNo)
-            }
-        })
+                override fun onRefresh(refreshLayout: RefreshLayout) {
+                    mPageNo = 0
+                    getChaptersList(mPageNo)
+                }
+            })
+        }
     }
 
     override fun onPause() {
