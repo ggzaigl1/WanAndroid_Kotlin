@@ -3,6 +3,9 @@ package com.example.gab.kotlin.ui.fragment
 import android.view.View
 import com.example.gab.kotlin.R
 import com.example.gab.kotlin.base.BaseFragment
+import com.ggz.baselibrary.utils.ToastUtils
+import kotlinx.android.synthetic.main.fragment_list_floab.*
+import org.jetbrains.anko.onClick
 
 /**
  * Created by 初夏小溪
@@ -21,5 +24,8 @@ class StarFragment : BaseFragment() {
     }
 
     override fun initData() {
+        fab_top.onClick {
+            ToastUtils.showShort("好嗨哦")
+        }
     }
 }

@@ -18,6 +18,8 @@ import com.ggz.baselibrary.application.IBaseActivity
 import com.ggz.baselibrary.retrofit.ioc.ConfigUtils
 import com.ggz.baselibrary.utils.*
 import kotlinx.android.synthetic.main.activity_webview.*
+import org.jetbrains.anko.browse
+import org.jetbrains.anko.share
 
 /**
  * Created by 初夏小溪
@@ -143,7 +145,8 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.web_share -> {
-                AndroidShareUtils.shareAllMsg(ConfigUtils.getAppCtx(), "分享到", mURl, AndroidShareUtils.TEXT, null)
+                share(mURl!!,"分享到")
+//                AndroidShareUtils.shareAllMsg(ConfigUtils.getAppCtx(), "分享到", mURl, AndroidShareUtils.TEXT, null)
             }
             R.id.web_collection -> {
                 if (TextUtils.isEmpty(SpfUtils.getSpfSaveStr(ConstantUtils.userName))) {
@@ -155,12 +158,14 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
                 }
             }
             R.id.web_browser -> {
-                val intent = Intent()
-                intent.run {
-                    data = Uri.parse(mURl)
-                    action = Intent.ACTION_VIEW
-                }
-                startActivity(intent)
+                browse(mURl!!)
+
+//                val intent = Intent()
+//                intent.run {
+//                    data = Uri.parse(mURl)
+//                    action = Intent.ACTION_VIEW
+//                }
+//                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)

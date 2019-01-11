@@ -1,7 +1,5 @@
 package com.example.gab.kotlin.ui.fragment
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +13,9 @@ import com.example.gab.kotlin.ui.OfficialAccountListActivity
 import com.ggz.baselibrary.retrofit.NetCallBack
 import com.ggz.baselibrary.retrofit.RequestUtils
 import com.ggz.baselibrary.retrofit.RxHelper
-import com.ggz.baselibrary.utils.JumpUtils
 import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_official_account.*
+import org.jetbrains.anko.startActivity
 
 /**
  * Created by 初夏小溪
@@ -57,6 +55,7 @@ class OfficialAccountFragment : BaseFragment() {
                     override fun onSuccess(officialAccountBeans: List<OfficialAccountBean>?) {
                         mKProgressHUD.dismiss()
                         mAdapter.setNewData(officialAccountBeans)
+
                     }
 
                     override fun updataLayout(flag: Int) {
@@ -68,9 +67,12 @@ class OfficialAccountFragment : BaseFragment() {
     private fun initView() {
         rv_official_account_fm.layoutManager = LinearLayoutManager(activity)
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val bundle = Bundle()
-            bundle.putInt("id", mAdapter.data[position].id)
-            JumpUtils.jumpFade(activity as AppCompatActivity?, OfficialAccountListActivity::class.java, bundle)
+
+//            val bundleOf = bundleOf("id" to mAdapter.data[position].id)
+//            JumpUtils.jumpFade(activity as AppCompatActivity?,OfficialAccountListActivity::class.java,bundleOf)
+
+            mContext.startActivity<OfficialAccountListActivity>("id" to mAdapter.data[position].id)
+            activity?.overridePendingTransition(com.ggz.baselibrary.R.anim.anim_slide_left_in, com.ggz.baselibrary.R.anim.anim_slide_left_out)
         }
         rv_official_account_fm.adapter = mAdapter
         mAdapter.setEmptyView(R.layout.activity_null_data, rv_official_account_fm.parent as ViewGroup)
