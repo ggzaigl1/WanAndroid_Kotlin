@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.gab.kotlin.R
-import com.example.gab.kotlin.adapter.BaseAdapter
 import com.example.gab.kotlin.adapter.NavigationLifeAdapter
 import com.example.gab.kotlin.adapter.NavigationRightAdapter
 import com.example.gab.kotlin.api.ApiService
@@ -17,7 +16,7 @@ import com.ggz.baselibrary.retrofit.RequestUtils
 import com.ggz.baselibrary.retrofit.RxHelper
 import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_navigation.*
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by 初夏小溪
@@ -80,7 +79,7 @@ class NavigationViewFragment : BaseFragment() {
                     mAdapter.data[mSelectedPos].isSelected = false
                     mAdapter.notifyItemChanged(mSelectedPos)
                     mSelectedPos = position
-                    mAdapter.getData().get(mSelectedPos).isSelected = true
+                    mAdapter.data[mSelectedPos].isSelected = true
                     mAdapter.notifyItemChanged(mSelectedPos)
                 }
                 val navigationBean = mAdapter.data[position]
