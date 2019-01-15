@@ -98,7 +98,7 @@ class MyCollectActivity : AppCompatActivity(), IBaseActivity {
                     }
 
                     override fun onSuccess(collectBean: CollectBean?) {
-                        if (collectBean != null) {
+                        collectBean?.let {
                             mKProgressHUD.dismiss()
                             when {
                                 refreshLayout_collect.isRefreshing -> {

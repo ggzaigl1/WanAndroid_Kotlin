@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.example.gab.kotlin.ui.PhotoViewActivity
+import com.example.gab.kotlin.ui.ToolsActivity
 import com.example.gab.kotlin.ui.fragment.*
 import com.ggz.baselibrary.retrofit.ioc.ConfigUtils
 import com.ggz.baselibrary.utils.*
@@ -25,8 +26,10 @@ import com.ggz.baselibrary.utils.cache.ACache
 import kotlinx.android.synthetic.main.activity_app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import org.jetbrains.anko.*
 
-class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListener,
+    NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var mFragmentManager: FragmentManager
     private lateinit var mHomeFragment: HomeFragment
@@ -72,7 +75,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
         setSupportActionBar(toolbar)
         navigation.setNavigationItemSelectedListener(this)
 
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -81,30 +90,40 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
         val ivNevHeader = headerView.findViewById<AppCompatImageView>(R.id.nev_header_imageView)
 
         ivNevHeader.setOnClickListener {
-            ivNevHeader.setOnClickListener { v -> JumpUtils.jumpFade(this@MainActivity, PhotoViewActivity::class.java, null) }
+            ivNevHeader.setOnClickListener { v ->
+                JumpUtils.jumpFade(
+                    this@MainActivity,
+                    PhotoViewActivity::class.java,
+                    null
+                )
+            }
         }
         mTvNevHeaderLogin?.setOnClickListener { v ->
             val isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin)
             if (isLogin) {
-                MaterialDialog.Builder(this)
-                        .cancelable(false)
-                        .title(R.string.system_title)
-                        .content(R.string.system_content)
-                        .positiveText(R.string.ok)
-                        .onPositive { dialog, which ->
-                            nev_header_tv_title?.setText(R.string.notLogin)
-                            nev_header_tv_login?.setText(R.string.clickLogin)
-                            val mCache = ACache.get(ConfigUtils.getAppCtx())
-                            mCache.clear()
-                            SpfUtils.clear()
-//                            mHomeFragment.mRefreshLayout.autoRefresh()
-                        }.negativeText(R.string.cancel)
-                        .onNegative { dialog, which -> dialog.dismiss() }.show()
+                alert(R.string.system_content, R.string.system_title) {
+                    yesButton {
+                        nev_header_tv_title?.setText(R.string.notLogin)
+                        nev_header_tv_login?.setText(R.string.clickLogin)
+                        val mCache = ACache.get(ConfigUtils.getAppCtx())
+                        mCache.clear()
+                        SpfUtils.clear()
+                    }
+                    noButton { it.dismiss() }
+                }.show()
             } else {
 //                JumpUtils.jumpFade(this@MainActivity, LoginActivity::class.java, null)
             }
         }
     }
+
+    //item selector
+//    textToSelector.setOnClickListener {
+//        val countries = listOf("Russia", "USA", "England", "Australia")
+//        selector("Where are you from?", countries) { ds, i ->
+//            toast("So you're living in ${countries[i]}, right?")
+//        }
+//    }
 
     private fun switchContent(fragment: Fragment) {
         if (mFragment != fragment) {
@@ -125,11 +144,36 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
             setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
             setMode(BottomNavigationBar.MODE_FIXED)
             setInActiveColor("#2c2c2c")
-            addItem(BottomNavigationItem(R.drawable.vector_home, getString(R.string.nav_home_title)).setActiveColorResource(R.color.pink))
-            addItem(BottomNavigationItem(R.drawable.vector_view_headline, getString(R.string.nav_system_title)).setActiveColorResource(R.color.pink))
-            addItem(BottomNavigationItem(R.drawable.vector_live_tv, getString(R.string.nav_view_title)).setActiveColorResource(R.color.pink))
-            addItem(BottomNavigationItem(R.drawable.vector_find, getString(R.string.nav_project_title)).setActiveColorResource(R.color.pink))
-            addItem(BottomNavigationItem(R.drawable.vector_official_account, getString(R.string.official_account)).setActiveColorResource(R.color.pink))
+            addItem(
+                BottomNavigationItem(
+                    R.drawable.vector_home,
+                    getString(R.string.nav_home_title)
+                ).setActiveColorResource(R.color.pink)
+            )
+            addItem(
+                BottomNavigationItem(
+                    R.drawable.vector_view_headline,
+                    getString(R.string.nav_system_title)
+                ).setActiveColorResource(R.color.pink)
+            )
+            addItem(
+                BottomNavigationItem(
+                    R.drawable.vector_live_tv,
+                    getString(R.string.nav_view_title)
+                ).setActiveColorResource(R.color.pink)
+            )
+            addItem(
+                BottomNavigationItem(
+                    R.drawable.vector_find,
+                    getString(R.string.nav_project_title)
+                ).setActiveColorResource(R.color.pink)
+            )
+            addItem(
+                BottomNavigationItem(
+                    R.drawable.vector_official_account,
+                    getString(R.string.official_account)
+                ).setActiveColorResource(R.color.pink)
+            )
             setFirstSelectedPosition(0)
             setTabSelectedListener(this@MainActivity)
             initialise()
@@ -140,7 +184,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
     override fun onResume() {
         super.onResume()
         val isLogin = SpfUtils.getSpfSaveBoolean(ConstantUtils.isLogin)
-        mTvNevHeaderTitle?.text = if (isLogin) SpfUtils.getSpfSaveStr(ConstantUtils.userName) else ResourceUtils.getStr(R.string.notLogin)
+        mTvNevHeaderTitle?.text =
+                if (isLogin) SpfUtils.getSpfSaveStr(ConstantUtils.userName) else ResourceUtils.getStr(R.string.notLogin)
         mTvNevHeaderLogin?.setText(if (isLogin) R.string.login_exit else R.string.clickLogin)
     }
 
@@ -163,7 +208,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (itemId) {
-            R.id.nav_belle -> ToastUtils.showShort("111")
+            R.id.nav_belle -> {
+                startActivity<ToolsActivity>()
+            }
         }
         return true
     }

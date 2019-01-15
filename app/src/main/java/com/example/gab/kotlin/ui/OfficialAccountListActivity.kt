@@ -2,6 +2,7 @@ package com.example.gab.kotlin.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -18,16 +19,13 @@ import com.ggz.baselibrary.application.IBaseActivity
 import com.ggz.baselibrary.retrofit.NetCallBack
 import com.ggz.baselibrary.retrofit.RequestUtils
 import com.ggz.baselibrary.retrofit.RxHelper
-import com.ggz.baselibrary.utils.ToastUtils
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import kotlinx.android.synthetic.main.activity_fingerprint_main.view.*
 import kotlinx.android.synthetic.main.activity_official_account.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.bundleOf
-import org.jetbrains.anko.textChangedListener
 
 /**
  * Created by 初夏小溪
@@ -58,25 +56,6 @@ class OfficialAccountListActivity : BaseActivity(), IBaseActivity {
         initRecycler()
         initRefresh()
         getChaptersList(mPageNo)
-
-        aaa.textChangedListener {
-            onTextChanged { str, strat, before, conut ->
-                ToastUtils.showShort(str.toString())
-            }
-        }
-
-        alert(R.string.system_title) {
-            title(R.string.search_menu_title)
-            neutralButton {
-                ToastUtils.showShort("确定")
-            }
-
-            negativeButton {
-                ToastUtils.showShort("取消")
-            }
-
-            show()
-        }
     }
 
     override fun onClick(v: View?) {
@@ -92,7 +71,8 @@ class OfficialAccountListActivity : BaseActivity(), IBaseActivity {
                 .compose(RxHelper.bindToLifecycle(this))
                 .subscribe(object : NetCallBack<ArticleBean>() {
                     override fun onSuccess(articleBean: ArticleBean?) {
-                        if (articleBean != null) {
+                        //articleBean 不为空 执行代码
+                        articleBean?.let {
                             mKProgressHUD?.dismiss()
                             when {
                                 srl_official_account.isRefreshing -> {
@@ -125,6 +105,7 @@ class OfficialAccountListActivity : BaseActivity(), IBaseActivity {
             adapter = mAdapter
             mAdapter.emptyView = LayoutInflater.from(this@OfficialAccountListActivity)
                     .inflate(R.layout.activity_null_data, parent as ViewGroup, false)
+
         }
     }
 

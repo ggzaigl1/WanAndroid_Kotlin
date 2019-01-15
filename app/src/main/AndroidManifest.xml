@@ -66,6 +66,10 @@
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".ui.ToolsActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
         <!-- WebView 相关 activity -->
         <!-- 8.0关于WebView的新特性 -->
         <activity

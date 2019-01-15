@@ -138,61 +138,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     /**
-     * 收藏
-     *
-     * @param view
-     * @param id
-     */
-    protected void getCollectArticle(View view, int id) {
-        mKProgressHUD = KProgressHUD.create(getActivity()).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true).setAnimationSpeed(2).setDimAmount(0.5f).show();
-        RequestUtils.create(ApiService.class)
-                .getCollectArticle(id, "")
-                .compose(RxHelper.handleResult())
-                .compose(RxHelper.bindToLifecycle(getActivity()))
-                .subscribe(new NetCallBack<Object>() {
-                    @Override
-                    protected void onSuccess(Object t) {
-                        mKProgressHUD.dismiss();
-                        Snackbar.make(view, R.string.collection_success, Snackbar.LENGTH_SHORT)
-                                .setAction("Action", null).show();
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-
-                    }
-                });
-    }
-
-
-    /**
-     * 取消收藏
-     *
-     * @param id
-     */
-    protected void getUnCollectArticle(int id) {
-        mKProgressHUD = KProgressHUD.create(getActivity())
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true).setAnimationSpeed(2).setDimAmount(0.5f).show();
-        RequestUtils.create(ApiService.class)
-                .unCollectArticle(id, "")
-                .compose(RxHelper.handleResult())
-                .compose(RxHelper.bindToLifecycle(getActivity()))
-                .subscribe(new NetCallBack<Object>() {
-                    @Override
-                    protected void onSuccess(Object t) {
-                        T.showShort(getString(R.string.cancel_collection_success));
-                        mKProgressHUD.dismiss();
-                    }
-
-                    @Override
-                    protected void updataLayout(int flag) {
-
-                    }
-                });
-    }
-
-
-    /**
      * //Fragment和Activity建立关联的时候调用
      *
      * @param context

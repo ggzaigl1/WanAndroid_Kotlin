@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
@@ -14,22 +13,30 @@ import android.text.TextUtils
 import android.view.*
 import android.webkit.*
 import com.example.gab.kotlin.R
+import com.example.gab.kotlin.base.BaseActivity
 import com.ggz.baselibrary.application.IBaseActivity
-import com.ggz.baselibrary.retrofit.ioc.ConfigUtils
-import com.ggz.baselibrary.utils.*
+import com.ggz.baselibrary.utils.ConstantUtils
+import com.ggz.baselibrary.utils.SpfUtils
+import com.ggz.baselibrary.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_webview.*
 import org.jetbrains.anko.browse
 import org.jetbrains.anko.share
+import org.jetbrains.anko.toast
 
 /**
  * Created by 初夏小溪
  * data :2019/1/7 0007 11:50
  */
-class WebViewActivity : AppCompatActivity(), IBaseActivity {
+class WebViewActivity : BaseActivity(), IBaseActivity {
 
     private var mURl: String? = null
     private var mIsCollect: Boolean? = null
     private var toolbar: Toolbar? = null
+
+    //懒加载:使用的时候才会初始化
+    private val mWebView: WebView by lazy {
+        web_view
+    }
 
     //在kotlin中的静态方法和变量是用companion object包裹，调用的时候用到Companion
     companion object {
@@ -68,7 +75,7 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
         intent.let {
             mURl = it.getStringExtra(WEB_URL)
         }
-        web_view.settings.run {
+        mWebView.settings.run {
             loadsImagesAutomatically = true
             domStorageEnabled = true
             javaScriptEnabled = true
@@ -82,7 +89,7 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
             }
         }
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        web_view.webChromeClient = object : WebChromeClient() {
+        mWebView.webChromeClient = object : WebChromeClient() {
             //用网页的标题来设置自己的标题栏
             override fun onReceivedTitle(view: WebView, title: String?) {
                 super.onReceivedTitle(view, title)
@@ -110,14 +117,14 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
             }
         }
 
-        web_view.webViewClient = object : WebViewClient() {
+        mWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                web_view.loadUrl(url)
+                mWebView.loadUrl(url)
                 return true
             }
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                web_view.visibility = View.GONE
+                mWebView.visibility = View.GONE
                 showError.visibility = View.VISIBLE
                 super.onReceivedError(view, request, error)
             }
@@ -127,14 +134,14 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
             }
 
             override fun onPageFinished(view: WebView, url: String) {
-                if (!web_view.settings.loadsImagesAutomatically) {
-                    web_view.settings.loadsImagesAutomatically = true
+                if (!mWebView.settings.loadsImagesAutomatically) {
+                    mWebView.settings.loadsImagesAutomatically = true
                 }
                 val position = SpfUtils.getInt(this@WebViewActivity, url, 0)
                 view.scrollTo(0, position)
             }
         }
-        web_view.loadUrl(mURl)
+        mWebView.loadUrl(mURl)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -145,7 +152,7 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.web_share -> {
-                share(mURl!!,"分享到")
+                share(mURl!!, "分享到")
 //                AndroidShareUtils.shareAllMsg(ConfigUtils.getAppCtx(), "分享到", mURl, AndroidShareUtils.TEXT, null)
             }
             R.id.web_collection -> {
@@ -153,7 +160,7 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
                     ToastUtils.showShort(R.string.collect_login)
                 } else {
                     if (mIsCollect!!) {
-                        ToastUtils.showShort("已经收藏")
+                        toast("已经收藏")
                     }
                 }
             }
@@ -189,23 +196,19 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
 
     override fun onPause() {
         super.onPause()
-        if (web_view != null) {
-            val scrollY = web_view.scrollY
-            //保存访问的位置
-            SpfUtils.putInt(this, mURl, scrollY)
-        }
+        val scrollY = mWebView.scrollY
+        //保存访问的位置
+        SpfUtils.putInt(this, mURl, scrollY)
     }
 
     override fun onDestroy() {
-        if (web_view != null) {
-            web_view.run {
-                loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
-                removeAllViews()
-                tag = null
-                clearHistory()
-                (parent as ViewGroup).removeView(web_view)
-                destroy()
-            }
+        mWebView.run {
+            loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
+            removeAllViews()
+            tag = null
+            clearHistory()
+            (parent as ViewGroup).removeView(mWebView)
+            destroy()
         }
         super.onDestroy()
     }
@@ -218,8 +221,8 @@ class WebViewActivity : AppCompatActivity(), IBaseActivity {
      * @return
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && web_view.canGoBack()) {
-            web_view.goBack()
+        if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack()) {
+            mWebView.goBack()
             return true
         }
         return super.onKeyDown(keyCode, event)

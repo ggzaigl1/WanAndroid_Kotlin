@@ -23,6 +23,7 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
+import kotlinx.android.synthetic.main.activity_official_account.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
 
@@ -55,7 +56,7 @@ class HomeFragment : BaseFragment() {
 
     private fun bannerView(pic: List<String>, urls: List<String>) {
         val banner = mContext.findViewById<Banner>(R.id.banner_news)
-        banner.run {
+        banner?.run {
             setImageLoader(BannerImageLoader())
             setIndicatorGravity(BannerConfig.RIGHT)
             setImages(pic)
@@ -97,27 +98,20 @@ class HomeFragment : BaseFragment() {
                 .compose(RxHelper.handleResult())
                 .compose(RxHelper.bindToLifecycle(mContext))
                 .subscribe(object : NetCallBack<ArticleBean>() {
-                    override fun onSuccess(articleBean: ArticleBean) {
+                    override fun onSuccess(articleBean: ArticleBean?) {
                         mKProgressHUD.dismiss()
-                        if (articleBean.datas.isNotEmpty()) {
+                        articleBean?.let {
                             when {
                                 home_srl.isRefreshing -> {
                                     mAdapter.setNewData(articleBean.datas)
                                     home_srl.finishRefresh()
                                 }
                                 home_srl.isLoading -> {
-                                    mAdapter.data.addAll(articleBean.datas!!)
+                                    mAdapter.data.addAll(articleBean.datas)
                                     home_srl.finishLoadMore()
                                     mAdapter.notifyDataSetChanged()
                                 }
                                 else -> mAdapter.setNewData(articleBean.datas)
-                            }
-                        } else {
-                            when {
-                                home_srl.isLoading ->
-                                    home_srl.finishLoadMore()
-                                home_srl.isRefreshing ->
-                                    home_srl.finishRefresh()
                             }
                         }
                     }
@@ -132,7 +126,7 @@ class HomeFragment : BaseFragment() {
         home_recyclerView.run {
             layoutManager = LinearLayoutManager(mContext)
             mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-                WebViewActivity.startWebActivity(mContext, mAdapter.data[position].link!!)
+                WebViewActivity.startWebActivity(mContext, mAdapter.data[position].link)
                 mContext.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
             adapter = mAdapter

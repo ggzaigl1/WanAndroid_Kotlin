@@ -8,6 +8,7 @@ import com.example.gab.kotlin.R
 import com.example.gab.kotlin.adapter.OfficialAccountAdapter
 import com.example.gab.kotlin.api.ApiService
 import com.example.gab.kotlin.base.BaseFragment
+import com.example.gab.kotlin.base.BaseFragments
 import com.example.gab.kotlin.bean.OfficialAccountBean
 import com.example.gab.kotlin.ui.OfficialAccountListActivity
 import com.ggz.baselibrary.retrofit.NetCallBack
@@ -28,7 +29,7 @@ class OfficialAccountFragment : BaseFragment() {
         return false
     }
 
-    override fun initView(view: View?) {
+    override fun initView(view: View) {
         initView()
     }
 
@@ -53,9 +54,10 @@ class OfficialAccountFragment : BaseFragment() {
                 .compose(RxHelper.bindToLifecycle(activity!!))
                 .subscribe(object : NetCallBack<List<OfficialAccountBean>>() {
                     override fun onSuccess(officialAccountBeans: List<OfficialAccountBean>?) {
-                        mKProgressHUD.dismiss()
-                        mAdapter.setNewData(officialAccountBeans)
-
+                        officialAccountBeans?.let {
+                            mKProgressHUD?.dismiss()
+                            mAdapter.setNewData(officialAccountBeans)
+                        }
                     }
 
                     override fun updataLayout(flag: Int) {
@@ -68,7 +70,7 @@ class OfficialAccountFragment : BaseFragment() {
         rv_official_account_fm.layoutManager = LinearLayoutManager(activity)
         mAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
 
-//            val bundleOf = bundleOf("id" to mAdapter.data[position].id)
+            //            val bundleOf = bundleOf("id" to mAdapter.data[position].id)
 //            JumpUtils.jumpFade(activity as AppCompatActivity?,OfficialAccountListActivity::class.java,bundleOf)
 
             mContext.startActivity<OfficialAccountListActivity>("id" to mAdapter.data[position].id)
