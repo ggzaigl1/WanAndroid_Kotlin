@@ -23,7 +23,6 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
-import kotlinx.android.synthetic.main.activity_official_account.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
 

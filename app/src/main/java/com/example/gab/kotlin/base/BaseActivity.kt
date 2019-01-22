@@ -1,6 +1,8 @@
 package com.example.gab.kotlin.base
 
 import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -22,8 +24,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivity, AnkoLogger {
     protected var mKProgressHUD: KProgressHUD? = null
     protected var permissionChecker: PermissionChecker? = null
     protected val PERMISSIONS = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE
-        , Manifest.permission.WRITE_EXTERNAL_STORAGE
+        READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
     )
     private lateinit var mContext: BaseActivity
 

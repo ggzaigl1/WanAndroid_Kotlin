@@ -1,7 +1,5 @@
 package com.example.gab.kotlin.bean
 
-import com.google.gson.annotations.SerializedName
-
 /**
  * Created by 初夏小溪
  * data :2019/1/10 0010 13:59
