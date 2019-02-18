@@ -1,5 +1,6 @@
 package com.example.gab.kotlin
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -14,9 +15,9 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.afollestad.materialdialogs.MaterialDialog
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
+import com.example.gab.kotlin.base.BaseActivity
 import com.example.gab.kotlin.ui.PhotoViewActivity
 import com.example.gab.kotlin.ui.ToolsActivity
 import com.example.gab.kotlin.ui.fragment.*
@@ -26,10 +27,12 @@ import com.ggz.baselibrary.utils.cache.ACache
 import kotlinx.android.synthetic.main.activity_app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.yesButton
 
-class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListener,
-    NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), BottomNavigationBar.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var mFragmentManager: FragmentManager
     private lateinit var mHomeFragment: HomeFragment

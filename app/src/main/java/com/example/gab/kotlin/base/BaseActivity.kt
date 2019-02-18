@@ -1,6 +1,5 @@
 package com.example.gab.kotlin.base
 
-import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
@@ -11,7 +10,6 @@ import com.ggz.baselibrary.utils.KeyBoardUtils
 import com.ggz.baselibrary.utils.permission.PermissionChecker
 import com.kaopiz.kprogresshud.KProgressHUD
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -48,11 +46,11 @@ abstract class BaseActivity : AppCompatActivity(), IBaseActivity, AnkoLogger {
         super.finish()
         //重写 Activity 的 finish ⽅法, 并调⽤ overridePendingTransition ⽅法，解决退出动画⽆效
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        KeyBoardUtils.closeKeyBoard(this)
+        KeyBoardUtils.closeKeyBoard(this@BaseActivity)
     }
 
 
-    inline fun <reified T : BaseActivity> startActivityForFinish() {
+    inline fun <reified T : AppCompatActivity> startActivityForFinish() {
         startActivity<T>()
         finish()
     }
